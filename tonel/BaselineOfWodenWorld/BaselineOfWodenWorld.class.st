@@ -14,7 +14,7 @@ BaselineOfWodenWorld >> baseline: spec [
 				spec requires: #( #WodenGameFramework).
 			];
 			package: #'WodenWorld-Tests' with: [
-				spec requires: #( #''WodenWorld-Core'').
+				spec requires: #( #'WodenWorld-Core').
 			]
 	].
 ]
