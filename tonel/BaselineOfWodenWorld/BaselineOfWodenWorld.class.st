@@ -15,6 +15,9 @@ BaselineOfWodenWorld >> baseline: spec [
 			];
 			package: #'WodenWorld-Tests' with: [
 				spec requires: #( #'WodenWorld-Core').
+			];
+			package: #'WodenWorld-Examples' with: [
+				spec requires: #( #'WodenWorld-Core').
 			]
 	].
 ]
