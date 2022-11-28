@@ -29,7 +29,7 @@ WEWDocumentObject >> encodeForJSON [
 
 { #category : #serialization }
 WEWDocumentObject >> encodeJsonKeyValues [
-	^ #()
+	self subclassResponsibility
 ]
 
 { #category : #serialization }

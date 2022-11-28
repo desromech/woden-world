@@ -5,25 +5,58 @@ Class {
 	#name : #WEWActorComponent,
 	#superclass : #WEWDocumentObject,
 	#instVars : [
-		'name',
-		'type',
-		'children'
+		'name'
+	],
+	#classVars : [
+		'ActorComponentTypeNameToClassDictionary'
 	],
 	#category : #'WodenWorld-Core-Model'
 }
 
-{ #category : #accessing }
-WEWActorComponent >> children [
+{ #category : #serialization }
+WEWActorComponent class >> actorComponentClassForType: typeName [
+	^ ActorComponentTypeNameToClassDictionary at: typeName ifAbsent: [ WEWGenericActorComponent ]
+]
 
-	^ children
+{ #category : #serialization }
+WEWActorComponent class >> actorComponentTypeName [
+	^ nil
+]
+
+{ #category : #initialization }
+WEWActorComponent class >> initialize [
+	ActorComponentTypeNameToClassDictionary := Dictionary new.
+	self withAllSubclassesDo: [ :eachClass |
+		eachClass actorComponentTypeName ifNotNil: [ :typeName |
+			ActorComponentTypeNameToClassDictionary at: typeName put: eachClass
+		]
+	].
+]
+
+{ #category : #serialization }
+WEWActorComponent class >> loadFromJson: jsonData [
+	^ (self actorComponentClassForType: (jsonData at: 'type' ifAbsent: [nil])) new
+		loadFromJson: jsonData;
+		yourself
+]
+
+{ #category : #accessing }
+WEWActorComponent >> encodeJsonKeyValues [
+	^ {
+		#name . name.
+		#type . self type.
+	}
 ]
 
 { #category : #initialization }
 WEWActorComponent >> initialize [
 	super initialize.
 	name := ''.
-	type := ''.
-	children := OrderedCollection new.
+]
+
+{ #category : #serialization }
+WEWActorComponent >> loadFromJson: jsonData [
+	self name: (jsonData at: 'name' ifAbsent: [self name])
 ]
 
 { #category : #accessing }
@@ -40,12 +73,5 @@ WEWActorComponent >> name: anObject [
 
 { #category : #accessing }
 WEWActorComponent >> type [
-
-	^ type
-]
-
-{ #category : #accessing }
-WEWActorComponent >> type: anObject [
-
-	type := anObject
+	^ self class actorComponentTypeName
 ]

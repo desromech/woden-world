@@ -98,7 +98,7 @@ WEWMetadata >> loadFromJson: jsonData [
 	self name: (jsonData at: 'name' ifAbsent: [self name]).
 	self title: (jsonData at: 'title' ifAbsent: [self title]).
 	self description: (jsonData at: 'description' ifAbsent: [self description]).
-	self copyright: (jsonData at: 'description' ifAbsent: [self description]).
+	self copyright: (jsonData at: 'copyright' ifAbsent: [self copyright]).
 	(jsonData at: 'optionalExtensions' ifPresent: [:extensionList |
 		optionalExtensions := extensionList asOrderedCollection
 	]).
