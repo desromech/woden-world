@@ -15,7 +15,7 @@ Class {
 
 { #category : #serialization }
 WEWActorComponent class >> actorComponentClassForType: typeName [
-	^ ActorComponentTypeNameToClassDictionary at: typeName ifAbsent: [ WEWGenericActorComponent ]
+	^ ActorComponentTypeNameToClassDictionary at: typeName ifAbsent: [ WEWGenericComponent ]
 ]
 
 { #category : #serialization }
@@ -40,7 +40,7 @@ WEWActorComponent class >> loadFromJson: jsonData [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : #serialization }
 WEWActorComponent >> encodeJsonKeyValues [
 	^ {
 		#name . name.
@@ -52,6 +52,36 @@ WEWActorComponent >> encodeJsonKeyValues [
 WEWActorComponent >> initialize [
 	super initialize.
 	name := ''.
+]
+
+{ #category : #testing }
+WEWActorComponent >> isBoxMeshComponent [
+	^ false
+]
+
+{ #category : #testing }
+WEWActorComponent >> isGenericComponent [
+	^ false
+]
+
+{ #category : #testing }
+WEWActorComponent >> isLightSourceComponent [
+	^ false
+]
+
+{ #category : #testing }
+WEWActorComponent >> isModelReferenceComponent [
+	^ false
+]
+
+{ #category : #testing }
+WEWActorComponent >> isProceduralMeshComponent [
+	^ false
+]
+
+{ #category : #testing }
+WEWActorComponent >> isSceneNodeComponent [
+	^ false
 ]
 
 { #category : #serialization }
