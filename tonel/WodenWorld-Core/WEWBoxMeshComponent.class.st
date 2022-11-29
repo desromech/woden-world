@@ -15,6 +15,11 @@ WEWBoxMeshComponent class >> actorComponentTypeName [
 	^ #BoxMesh
 ]
 
+{ #category : #hooks }
+WEWBoxMeshComponent >> buildMeshWith: meshBuilder [
+	meshBuilder addCubeWithHalfExtent: halfExtent
+]
+
 { #category : #accessing }
 WEWBoxMeshComponent >> encodeJsonKeyValues [
 	^ super encodeJsonKeyValues , {

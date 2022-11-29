@@ -32,6 +32,20 @@ WEWActor >> beStatic [
 	self syncMode: #static
 ]
 
+{ #category : #'game framework' }
+WEWActor >> buildGameFrameworkActor [
+	| actor |
+	actor := WDGFActor new.
+	actor name: name.
+	components do: [ :eachComponent |
+		eachComponent buildGameFrameworkComponent ifNotNil: [ :component |
+			actor addComponent: component
+		].
+	].
+
+	^ actor
+]
+
 { #category : #accessing }
 WEWActor >> components [
 

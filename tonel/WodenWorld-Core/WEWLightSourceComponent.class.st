@@ -21,6 +21,52 @@ WEWLightSourceComponent class >> actorComponentTypeName [
 	^ #LightSource
 ]
 
+{ #category : #'scene graph' }
+WEWLightSourceComponent >> buildDirectionalLightSource [
+	^ WDDirectionalLightSource new
+		color: color;
+		intensity: intensity;
+		castShadows: castShadows;
+		yourself
+]
+
+{ #category : #'game framework' }
+WEWLightSourceComponent >> buildGameFrameworkComponent [
+	^ WDGFActorLightSourceSceneComponent new
+		light: self buildLightSource;
+		yourself
+]
+
+{ #category : #'scene graph' }
+WEWLightSourceComponent >> buildLightSource [
+	self isPointLightSource ifTrue: [ ^ self buildPointLightSource ].
+	self isSpotLightSource ifTrue: [ ^ self buildSpotLightLightSource ].
+	self isDirectionalLightSource ifTrue: [ ^ self buildDirectionalLightSource ].
+	self error: 'Unsupported light source kind'
+]
+
+{ #category : #'scene graph' }
+WEWLightSourceComponent >> buildPointLightSource [
+	^ WDPointLightSource new
+		color: color;
+		intensity: intensity;
+		influenceRadius: range;
+		castShadows: castShadows;
+		yourself
+]
+
+{ #category : #'scene graph' }
+WEWLightSourceComponent >> buildSpotLightLightSource [
+	^ WDSpotLightSource new
+		color: color;
+		intensity: intensity;
+		influenceRadius: range;
+		castShadows: castShadows;
+		innerCutoff: innerConeAngle;
+		outerCutoff: outerConeAngle;
+		yourself
+]
+
 { #category : #accessing }
 WEWLightSourceComponent >> castShadows [
 
@@ -95,8 +141,23 @@ WEWLightSourceComponent >> intensity: anObject [
 ]
 
 { #category : #testing }
+WEWLightSourceComponent >> isDirectionalLightSource [
+	^ kind = #directional
+]
+
+{ #category : #testing }
 WEWLightSourceComponent >> isLightSourceComponent [
 	^ true
+]
+
+{ #category : #testing }
+WEWLightSourceComponent >> isPointLightSource [
+	^ kind = #point
+]
+
+{ #category : #testing }
+WEWLightSourceComponent >> isSpotLightSource [
+	^ kind = #spot
 ]
 
 { #category : #accessing }
@@ -106,9 +167,22 @@ WEWLightSourceComponent >> kind [
 ]
 
 { #category : #accessing }
-WEWLightSourceComponent >> kind: anObject [
+WEWLightSourceComponent >> kind: aLightSourceKindName [
+	self assert: (#(point spot directional) includes: aLightSourceKindName).
+	kind := aLightSourceKindName asSymbol.
+]
 
-	kind := anObject
+{ #category : #accessing }
+WEWLightSourceComponent >> loadFromJson: jsonData [
+	super loadFromJson: jsonData.
+	self kind: (jsonData at: 'kind' ifAbsent: [self kind]).
+	self intensity: (jsonData at: 'intensity' ifAbsent: [self intensity]).
+	self range: (jsonData at: 'range' ifAbsent: [self range]).
+	self castShadows: (jsonData at: 'castShadows' ifAbsent: [self castShadows]).
+	self innerConeAngle: (jsonData at: 'innerConeAngle' ifAbsent: [self innerConeAngle]).
+	self outerConeAngle: (jsonData at: 'outerConeAngle' ifAbsent: [self outerConeAngle]).
+	
+	jsonData at: 'color' ifPresent: [:found | self color: (Vector3 loadFromJson: found)].
 ]
 
 { #category : #accessing }

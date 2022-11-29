@@ -15,6 +15,14 @@ WEWModelReferenceComponent class >> actorComponentTypeName [
 	^ #ModelReference
 ]
 
+{ #category : #'as yet unclassified' }
+WEWModelReferenceComponent >> buildGameFrameworkComponent [
+	self flag: 'TODO: Create an asynchronous mesh reference here.'.
+	^ WDGFActorMeshSceneComponent new
+		name: name;
+		yourself
+]
+
 { #category : #serialization }
 WEWModelReferenceComponent >> encodeJsonKeyValues [
 	^ super encodeJsonKeyValues , {

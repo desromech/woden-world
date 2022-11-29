@@ -21,6 +21,22 @@ WEWSceneNodeComponent >> addChild: aChildComponent [
 	children add: aChildComponent
 ]
 
+{ #category : #'as yet unclassified' }
+WEWSceneNodeComponent >> buildGameFrameworkComponent [
+	| sceneComponent |
+	sceneComponent := WDGFActorSceneComponent new
+		name: name;
+		transform: transform;
+		yourself.
+	children do: [ :eachChild |
+		eachChild buildGameFrameworkComponent ifNotNil: [ :childComponent |
+			sceneComponent addChildSceneComponent: childComponent
+		]
+	].
+
+	^ sceneComponent
+]
+
 { #category : #accessing }
 WEWSceneNodeComponent >> children [
 	^ children

@@ -40,6 +40,11 @@ WEWActorComponent class >> loadFromJson: jsonData [
 		yourself
 ]
 
+{ #category : #'as yet unclassified' }
+WEWActorComponent >> buildGameFrameworkComponent [
+	^ self subclassResponsibility
+]
+
 { #category : #serialization }
 WEWActorComponent >> encodeJsonKeyValues [
 	^ {

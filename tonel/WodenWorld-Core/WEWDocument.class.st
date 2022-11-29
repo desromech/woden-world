@@ -21,6 +21,16 @@ WEWDocument >> addActor: anActor [
 	actors add: anActor
 ]
 
+{ #category : #'game framework' }
+WEWDocument >> buildGameFrameworkWorld [
+	| world |
+	world := WDGFWorld new.
+	actors do: [ :each |
+		world spawnActor: each buildGameFrameworkActor
+	].
+	^ world
+]
+
 { #category : #serialization }
 WEWDocument >> encodeJsonKeyValues [
 	^ {

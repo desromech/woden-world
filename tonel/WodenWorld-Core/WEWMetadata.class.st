@@ -11,8 +11,8 @@ Class {
 		'title',
 		'description',
 		'copyright',
-		'optionalExtensions',
-		'requiredExtensions'
+		'extensionsRequired',
+		'extensionsUsed'
 	],
 	#category : #'WodenWorld-Core-Model'
 }
@@ -62,9 +62,33 @@ WEWMetadata >> encodeJsonKeyValues [
 		#title . title.
 		#description . description.
 		#copyright . copyright.
-		#optionalExtensions . optionalExtensions asArray.
-		#requiredExtensions . requiredExtensions asArray.
+		#extensionsUsed . extensionsUsed asArray.
+		#extensionsRequired . extensionsRequired asArray.
 	}
+]
+
+{ #category : #accessing }
+WEWMetadata >> extensionsRequired [
+
+	^ extensionsRequired
+]
+
+{ #category : #accessing }
+WEWMetadata >> extensionsRequired: anObject [
+
+	extensionsRequired := anObject
+]
+
+{ #category : #accessing }
+WEWMetadata >> extensionsUsed [
+
+	^ extensionsUsed
+]
+
+{ #category : #accessing }
+WEWMetadata >> extensionsUsed: anObject [
+
+	extensionsUsed := anObject
 ]
 
 { #category : #accessing }
@@ -88,8 +112,8 @@ WEWMetadata >> initialize [
 	title := ''.
 	description := ''.
 	copyright := ''.
-	optionalExtensions := OrderedCollection new.
-	requiredExtensions := OrderedCollection new.
+	extensionsUsed := OrderedCollection new.
+	extensionsRequired := OrderedCollection new.
 ]
 
 { #category : #serialization }
@@ -99,11 +123,11 @@ WEWMetadata >> loadFromJson: jsonData [
 	self title: (jsonData at: 'title' ifAbsent: [self title]).
 	self description: (jsonData at: 'description' ifAbsent: [self description]).
 	self copyright: (jsonData at: 'copyright' ifAbsent: [self copyright]).
-	(jsonData at: 'optionalExtensions' ifPresent: [:extensionList |
-		optionalExtensions := extensionList asOrderedCollection
+	(jsonData at: 'extensionsUsed' ifPresent: [:extensionList |
+		extensionsUsed := extensionList asOrderedCollection
 	]).
-	(jsonData at: 'requiredExtensions' ifPresent: [:extensionList |
-		requiredExtensions := extensionList asOrderedCollection
+	(jsonData at: 'extensionsRequired' ifPresent: [:extensionList |
+		extensionsRequired := extensionList asOrderedCollection
 	]).
 	
 ]
@@ -118,30 +142,6 @@ WEWMetadata >> name [
 WEWMetadata >> name: anObject [
 
 	name := anObject
-]
-
-{ #category : #accessing }
-WEWMetadata >> optionalExtensions [
-
-	^ optionalExtensions
-]
-
-{ #category : #accessing }
-WEWMetadata >> optionalExtensions: anObject [
-
-	optionalExtensions := anObject
-]
-
-{ #category : #accessing }
-WEWMetadata >> requiredExtensions [
-
-	^ requiredExtensions
-]
-
-{ #category : #accessing }
-WEWMetadata >> requiredExtensions: anObject [
-
-	requiredExtensions := anObject
 ]
 
 { #category : #accessing }
