@@ -6,7 +6,8 @@ Class {
 	#superclass : #WEWDocumentObject,
 	#instVars : [
 		'actors',
-		'metadata'
+		'metadata',
+		'landmarks'
 	],
 	#category : #'WodenWorld-Core-Model'
 }
@@ -19,6 +20,11 @@ WEWDocument >> actors [
 { #category : #adding }
 WEWDocument >> addActor: anActor [
 	actors add: anActor
+]
+
+{ #category : #adding }
+WEWDocument >> addLandmark: aLandmark [
+	landmarks add: aLandmark
 ]
 
 { #category : #'game framework' }
@@ -36,6 +42,7 @@ WEWDocument >> encodeJsonKeyValues [
 	^ {
 		#metadata . metadata encodeForJSON.
 		#actors . actors collect: [:each | each encodeForJSON ] as: Array.
+		#landmarks . landmarks collect: [:each | each encodeForJSON ] as: Array.
 	}
 ]
 
@@ -43,7 +50,13 @@ WEWDocument >> encodeJsonKeyValues [
 WEWDocument >> initialize [
 	super initialize.
 	actors := OrderedCollection new.
+	landmarks := OrderedCollection new.
 	metadata := WEWMetadata new.
+]
+
+{ #category : #accessing }
+WEWDocument >> landmarks [
+	^ landmarks
 ]
 
 { #category : #serialization }
@@ -55,6 +68,12 @@ WEWDocument >> loadFromJson: jsonData [
 	jsonData at: 'actors' ifPresent: [ :actorList |
 		actorList do: [ :eachActor |
 			self addActor: (WEWActor loadFromJson: eachActor)
+		]
+	].
+
+	jsonData at: 'landmarks' ifPresent: [ :landmarkList |
+		landmarkList do: [ :eachLandmark |
+			self addLandmark: (WEWLandmark loadFromJson: eachLandmark)
 		]
 	].
 

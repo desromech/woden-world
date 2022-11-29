@@ -69,6 +69,31 @@ WEWDocumentTest >> testActorWithBoxMesh [
 ]
 
 { #category : #tests }
+WEWDocumentTest >> testLandmark [
+	| wew jsonString loadedWew landmark loadedLandmark |
+	wew := WEWDocument new.
+	self assert: wew landmarks isEmpty.
+	
+	landmark := WEWLandmark new
+		name: 'TestLandmark';
+		position: (Vector3 x: 1 y: 2 z: 3);
+		yourself.
+	wew addLandmark: landmark.
+	self assert: landmark name equals: 'TestLandmark'.
+	self assert: landmark position equals: (Vector3 x: 1 y: 2 z: 3).
+	self assert: wew landmarks size equals: 1.
+	
+	jsonString := wew encodeAsJSONString.
+	loadedWew := WEWDocument loadFromJsonString: jsonString.
+	self assert: loadedWew landmarks size equals: 1.
+	
+	loadedLandmark := loadedWew landmarks first.
+	self assert: loadedLandmark name equals: 'TestLandmark'.
+	self assert: loadedLandmark position equals: (Vector3 x: 1 y: 2 z: 3).
+
+]
+
+{ #category : #tests }
 WEWDocumentTest >> testNew [
 	| wew jsonString loadedWew |
 	wew := WEWDocument new.
