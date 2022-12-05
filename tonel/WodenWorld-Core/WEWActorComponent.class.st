@@ -40,7 +40,7 @@ WEWActorComponent class >> loadFromJson: jsonData [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'game framework' }
 WEWActorComponent >> buildGameFrameworkComponent [
 	^ self subclassResponsibility
 ]

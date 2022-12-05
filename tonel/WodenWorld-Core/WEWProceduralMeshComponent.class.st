@@ -7,7 +7,7 @@ Class {
 	#category : #'WodenWorld-Core-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'game framework' }
 WEWProceduralMeshComponent >> buildGameFrameworkComponent [
 	| meshBuilder mesh |
 	meshBuilder := WDMeshBuilder new.

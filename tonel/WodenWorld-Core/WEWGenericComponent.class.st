@@ -10,7 +10,7 @@ Class {
 	#category : #'WodenWorld-Core-Model'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : #'game framework' }
 WEWGenericComponent >> buildGameFrameworkComponent [
 	^ nil
 ]

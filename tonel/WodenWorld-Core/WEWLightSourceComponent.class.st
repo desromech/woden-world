@@ -21,6 +21,21 @@ WEWLightSourceComponent class >> actorComponentTypeName [
 	^ #LightSource
 ]
 
+{ #category : #'public - configuration' }
+WEWLightSourceComponent >> beDirectional [
+	self kind: #directional
+]
+
+{ #category : #'public - configuration' }
+WEWLightSourceComponent >> bePoint [
+	self kind: #point
+]
+
+{ #category : #'public - configuration' }
+WEWLightSourceComponent >> beSpot [
+	self kind: #spot
+]
+
 { #category : #'scene graph' }
 WEWLightSourceComponent >> buildDirectionalLightSource [
 	^ WDDirectionalLightSource new

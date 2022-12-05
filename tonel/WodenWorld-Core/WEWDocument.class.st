@@ -37,6 +37,22 @@ WEWDocument >> buildGameFrameworkWorld [
 	^ world
 ]
 
+{ #category : #'game framework' }
+WEWDocument >> buildGameFrameworkWorldWithDefaultAvatar [
+	^ self buildGameFrameworkWorld
+		spawnActor: (WDGFActorTemplates noclipCameraActor
+			transform: self defaultAvatarLandmarkTransform;
+			yourself);
+		yourself
+]
+
+{ #category : #accessing }
+WEWDocument >> defaultAvatarLandmarkTransform [
+	^ landmarks isEmpty
+		ifTrue: [ TRSTransform3D identity ]
+		ifFalse: [ landmarks first transform ]
+]
+
 { #category : #serialization }
 WEWDocument >> encodeJsonKeyValues [
 	^ {

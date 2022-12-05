@@ -6,7 +6,8 @@ Class {
 	#superclass : #WEWActorComponent,
 	#instVars : [
 		'transform',
-		'children'
+		'children',
+		'sceneBackground'
 	],
 	#category : #'WodenWorld-Core-Model'
 }
@@ -21,12 +22,13 @@ WEWSceneNodeComponent >> addChild: aChildComponent [
 	children add: aChildComponent
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'game framework' }
 WEWSceneNodeComponent >> buildGameFrameworkComponent [
 	| sceneComponent |
 	sceneComponent := WDGFActorSceneComponent new
 		name: name;
 		transform: transform;
+		sceneBackground: sceneBackground;
 		yourself.
 	children do: [ :eachChild |
 		eachChild buildGameFrameworkComponent ifNotNil: [ :childComponent |
@@ -42,11 +44,12 @@ WEWSceneNodeComponent >> children [
 	^ children
 ]
 
-{ #category : #accessing }
+{ #category : #serialization }
 WEWSceneNodeComponent >> encodeJsonKeyValues [
 	^ super encodeJsonKeyValues , {
 		#transform . transform encodeForJSON.
 		#children . children collect: [:each | each encodeForJSON ] as: Array.
+		#sceneBackground . sceneBackground.
 	}
 ]
 
@@ -55,6 +58,7 @@ WEWSceneNodeComponent >> initialize [
 	super initialize.
 	transform := TRSTransform3D identity.
 	children := OrderedCollection new.
+	sceneBackground := false.
 ]
 
 { #category : #testing }
@@ -65,6 +69,7 @@ WEWSceneNodeComponent >> isSceneNodeComponent [
 { #category : #serialization }
 WEWSceneNodeComponent >> loadFromJson: jsonData [
 	super loadFromJson: jsonData.
+	self sceneBackground: (jsonData at: 'sceneBackground' ifAbsent: [self sceneBackground]).
 	jsonData at: 'transform' ifPresent: [:found |
 		self transform: (TRSTransform3D loadFromJson: found)
 	].
@@ -96,6 +101,36 @@ WEWSceneNodeComponent >> position: aPosition [
 	transform translation: aPosition
 ]
 
+{ #category : #transforming }
+WEWSceneNodeComponent >> rotateDegreesOnX: rotation [
+	transform rotateDegreesOnX: rotation.
+]
+
+{ #category : #transforming }
+WEWSceneNodeComponent >> rotateDegreesOnY: rotation [
+	transform rotateDegreesOnY: rotation.
+]
+
+{ #category : #transforming }
+WEWSceneNodeComponent >> rotateDegreesOnZ: rotation [
+	transform rotateDegreesOnZ: rotation.
+]
+
+{ #category : #transforming }
+WEWSceneNodeComponent >> rotateRadiansOnX: rotation [
+	transform rotateRadiansOnX: rotation.
+]
+
+{ #category : #transforming }
+WEWSceneNodeComponent >> rotateRadiansOnY: rotation [
+	transform rotateRadiansOnY: rotation.
+]
+
+{ #category : #transforming }
+WEWSceneNodeComponent >> rotateRadiansOnZ: rotation [
+	transform rotateRadiansOnZ: rotation.
+]
+
 { #category : #accessing }
 WEWSceneNodeComponent >> scale [
 	^ transform scale
@@ -104,6 +139,18 @@ WEWSceneNodeComponent >> scale [
 { #category : #accessing }
 WEWSceneNodeComponent >> scale: aScale [
 	transform scale: aScale
+]
+
+{ #category : #accessing }
+WEWSceneNodeComponent >> sceneBackground [
+
+	^ sceneBackground
+]
+
+{ #category : #accessing }
+WEWSceneNodeComponent >> sceneBackground: anObject [
+
+	sceneBackground := anObject
 ]
 
 { #category : #accessing }
@@ -116,4 +163,29 @@ WEWSceneNodeComponent >> transform [
 WEWSceneNodeComponent >> transform: anObject [
 
 	transform := anObject
+]
+
+{ #category : #transforming }
+WEWSceneNodeComponent >> translateBy: aVector [
+	transform translateBy: aVector.
+]
+
+{ #category : #transforming }
+WEWSceneNodeComponent >> translateByX: amount [
+	transform translateByX: amount.
+]
+
+{ #category : #transforming }
+WEWSceneNodeComponent >> translateByY: amount [
+	transform translateByY: amount.
+]
+
+{ #category : #transforming }
+WEWSceneNodeComponent >> translateByZ: amount [
+	transform translateByZ: amount.
+]
+
+{ #category : #transforming }
+WEWSceneNodeComponent >> translateToX: x y: y z: z [
+	transform translateToX: x y: y z: z.
 ]

@@ -15,7 +15,7 @@ WEWModelReferenceComponent class >> actorComponentTypeName [
 	^ #ModelReference
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'game framework' }
 WEWModelReferenceComponent >> buildGameFrameworkComponent [
 	self flag: 'TODO: Create an asynchronous mesh reference here.'.
 	^ WDGFActorMeshSceneComponent new
