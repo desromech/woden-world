@@ -5,12 +5,18 @@ Class {
 	#name : #WEWDocument,
 	#superclass : #WEWDocumentObject,
 	#instVars : [
+		'actorTemplates',
 		'actors',
 		'metadata',
 		'landmarks'
 	],
 	#category : #'WodenWorld-Core-Model'
 }
+
+{ #category : #accessing }
+WEWDocument >> actorTemplates [
+	^ actorTemplates
+]
 
 { #category : #accessing }
 WEWDocument >> actors [
@@ -20,6 +26,11 @@ WEWDocument >> actors [
 { #category : #adding }
 WEWDocument >> addActor: anActor [
 	actors add: anActor
+]
+
+{ #category : #adding }
+WEWDocument >> addActorTemplate: anActorTemplate [
+	actorTemplates add: anActorTemplate
 ]
 
 { #category : #adding }
@@ -57,6 +68,7 @@ WEWDocument >> defaultAvatarLandmarkTransform [
 WEWDocument >> encodeJsonKeyValues [
 	^ {
 		#metadata . metadata encodeForJSON.
+		#actorTemplates . actorTemplates collect: [:each | each encodeForJSON ] as: Array.
 		#actors . actors collect: [:each | each encodeForJSON ] as: Array.
 		#landmarks . landmarks collect: [:each | each encodeForJSON ] as: Array.
 	}
@@ -65,6 +77,7 @@ WEWDocument >> encodeJsonKeyValues [
 { #category : #initialization }
 WEWDocument >> initialize [
 	super initialize.
+	actorTemplates := OrderedCollection new.
 	actors := OrderedCollection new.
 	landmarks := OrderedCollection new.
 	metadata := WEWMetadata new.
@@ -79,6 +92,12 @@ WEWDocument >> landmarks [
 WEWDocument >> loadFromJson: jsonData [
 	jsonData at: 'metadata' ifPresent: [ :found |
 		self metadata: (WEWMetadata loadFromJson: found)
+	].
+
+	jsonData at: 'actorTemplates' ifPresent: [ :actorList |
+		actorList do: [ :eachActor |
+			self addActorTemplate: (WEWActor loadFromJson: eachActor)
+		]
 	].
 
 	jsonData at: 'actors' ifPresent: [ :actorList |

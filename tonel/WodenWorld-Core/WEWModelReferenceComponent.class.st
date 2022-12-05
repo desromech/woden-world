@@ -5,7 +5,8 @@ Class {
 	#name : #WEWModelReferenceComponent,
 	#superclass : #WEWActorComponent,
 	#instVars : [
-		'uri'
+		'uri',
+		'elementSelector'
 	],
 	#category : #'WodenWorld-Core-Model'
 }
@@ -17,17 +18,38 @@ WEWModelReferenceComponent class >> actorComponentTypeName [
 
 { #category : #'game framework' }
 WEWModelReferenceComponent >> buildGameFrameworkComponent [
-	self flag: 'TODO: Create an asynchronous mesh reference here.'.
-	^ WDGFActorMeshSceneComponent new
+	^ WDGFActorAsyncModelSceneComponent new
 		name: name;
+		uri: uri;
+		elementSelector: elementSelector;
 		yourself
+]
+
+{ #category : #accessing }
+WEWModelReferenceComponent >> elementSelector [
+
+	^ elementSelector
+]
+
+{ #category : #accessing }
+WEWModelReferenceComponent >> elementSelector: anObject [
+
+	elementSelector := anObject
 ]
 
 { #category : #serialization }
 WEWModelReferenceComponent >> encodeJsonKeyValues [
 	^ super encodeJsonKeyValues , {
+		#elementSelector . elementSelector.
 		#uri . uri.
 	}
+]
+
+{ #category : #initialization }
+WEWModelReferenceComponent >> initialize [
+	super initialize.
+	elementSelector := ''.
+	uri := ''.
 ]
 
 { #category : #testing }
