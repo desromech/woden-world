@@ -67,8 +67,8 @@ WEWSceneNodeComponent >> isSceneNodeComponent [
 ]
 
 { #category : #serialization }
-WEWSceneNodeComponent >> loadFromJson: jsonData [
-	super loadFromJson: jsonData.
+WEWSceneNodeComponent >> loadFromJson: jsonData context: asyncContext [
+	super loadFromJson: jsonData context: asyncContext.
 	self sceneBackground: (jsonData at: 'sceneBackground' ifAbsent: [self sceneBackground]).
 	jsonData at: 'transform' ifPresent: [:found |
 		self transform: (TRSTransform3D loadFromJson: found)
@@ -76,7 +76,7 @@ WEWSceneNodeComponent >> loadFromJson: jsonData [
 	
 	jsonData at: 'children' ifPresent: [ :childrenList |
 		childrenList do: [ :eachChild |
-			self addChild: (WEWActorComponent loadFromJson: eachChild)
+			self addChild: (WEWActorComponent loadFromJson: eachChild context: asyncContext)
 		]
 	].
 ]

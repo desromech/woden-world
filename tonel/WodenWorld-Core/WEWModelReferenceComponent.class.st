@@ -6,7 +6,8 @@ Class {
 	#superclass : #WEWActorComponent,
 	#instVars : [
 		'uri',
-		'elementSelector'
+		'elementSelector',
+		'asyncContext'
 	],
 	#category : #'WodenWorld-Core-Model'
 }
@@ -16,12 +17,25 @@ WEWModelReferenceComponent class >> actorComponentTypeName [
 	^ #ModelReference
 ]
 
+{ #category : #accessing }
+WEWModelReferenceComponent >> asyncContext [
+
+	^ asyncContext
+]
+
+{ #category : #accessing }
+WEWModelReferenceComponent >> asyncContext: anObject [
+
+	asyncContext := anObject
+]
+
 { #category : #'game framework' }
 WEWModelReferenceComponent >> buildGameFrameworkComponent [
 	^ WDGFActorAsyncModelSceneComponent new
 		name: name;
 		uri: uri;
 		elementSelector: elementSelector;
+		asyncContext: asyncContext;
 		yourself
 ]
 
@@ -40,8 +54,8 @@ WEWModelReferenceComponent >> elementSelector: anObject [
 { #category : #serialization }
 WEWModelReferenceComponent >> encodeJsonKeyValues [
 	^ super encodeJsonKeyValues , {
-		#elementSelector . elementSelector.
 		#uri . uri.
+		#elementSelector . elementSelector.
 	}
 ]
 
@@ -58,9 +72,11 @@ WEWModelReferenceComponent >> isModelReferenceComponent [
 ]
 
 { #category : #serialization }
-WEWModelReferenceComponent >> loadFromJson: jsonData [
-	super loadFromJson: jsonData.
-	self uri: (jsonData at: 'uri' ifAbsent: [self uri])
+WEWModelReferenceComponent >> loadFromJson: jsonData context: context [
+	super loadFromJson: jsonData context: asyncContext.
+	self uri: (jsonData at: 'uri' ifAbsent: [self uri]).
+	self elementSelector: (jsonData at: 'elementSelector' ifAbsent: [self elementSelector]).
+	self asyncContext: context.
 ]
 
 { #category : #accessing }

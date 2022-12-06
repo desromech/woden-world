@@ -89,26 +89,26 @@ WEWDocument >> landmarks [
 ]
 
 { #category : #serialization }
-WEWDocument >> loadFromJson: jsonData [
+WEWDocument >> loadFromJson: jsonData context: asyncContext [
 	jsonData at: 'metadata' ifPresent: [ :found |
-		self metadata: (WEWMetadata loadFromJson: found)
+		self metadata: (WEWMetadata loadFromJson: found context: asyncContext)
 	].
 
 	jsonData at: 'actorTemplates' ifPresent: [ :actorList |
 		actorList do: [ :eachActor |
-			self addActorTemplate: (WEWActor loadFromJson: eachActor)
+			self addActorTemplate: (WEWActor loadFromJson: eachActor context: asyncContext)
 		]
 	].
 
 	jsonData at: 'actors' ifPresent: [ :actorList |
 		actorList do: [ :eachActor |
-			self addActor: (WEWActor loadFromJson: eachActor)
+			self addActor: (WEWActor loadFromJson: eachActor context: asyncContext)
 		]
 	].
 
 	jsonData at: 'landmarks' ifPresent: [ :landmarkList |
 		landmarkList do: [ :eachLandmark |
-			self addLandmark: (WEWLandmark loadFromJson: eachLandmark)
+			self addLandmark: (WEWLandmark loadFromJson: eachLandmark context: asyncContext)
 		]
 	].
 

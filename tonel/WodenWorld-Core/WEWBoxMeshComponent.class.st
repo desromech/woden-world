@@ -51,8 +51,8 @@ WEWBoxMeshComponent >> isBoxMeshComponent [
 ]
 
 { #category : #serialization }
-WEWBoxMeshComponent >> loadFromJson: jsonData [
-	super loadFromJson: jsonData.
+WEWBoxMeshComponent >> loadFromJson: jsonData context: asyncContext [
+	super loadFromJson: jsonData context: asyncContext.
 	jsonData at: 'halfExtent' ifPresent: [:found |
 		self halfExtent: (Vector3 loadFromJson: found)
 	].

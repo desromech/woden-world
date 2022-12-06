@@ -9,12 +9,22 @@ Class {
 
 { #category : #serialization }
 WEWDocumentObject class >> loadFromJson: jsonData [
-	^ self new loadFromJson: jsonData; yourself
+	^ self loadFromJson: jsonData context: nil
 ]
 
 { #category : #serialization }
-WEWDocumentObject class >> loadFromJsonString: jsonString [
-	^ self loadFromJson: (STONJSON fromString: jsonString)
+WEWDocumentObject class >> loadFromJson: jsonData context: asyncContext [
+	^ self new loadFromJson: jsonData context: asyncContext; yourself
+]
+
+{ #category : #serialization }
+WEWDocumentObject class >> loadFromJsonString: jsonData [
+	^ self loadFromJsonString: jsonData context: nil
+]
+
+{ #category : #serialization }
+WEWDocumentObject class >> loadFromJsonString: jsonString context: asyncContext [
+	^ self loadFromJson: (STONJSON fromString: jsonString) context: asyncContext
 ]
 
 { #category : #serialization }
@@ -33,7 +43,7 @@ WEWDocumentObject >> encodeJsonKeyValues [
 ]
 
 { #category : #serialization }
-WEWDocumentObject >> loadFromJson: jsonData [
+WEWDocumentObject >> loadFromJson: jsonData context: asyncContext [
 	self subclassResponsibility
 ]
 

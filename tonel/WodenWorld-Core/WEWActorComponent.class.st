@@ -34,9 +34,9 @@ WEWActorComponent class >> initialize [
 ]
 
 { #category : #serialization }
-WEWActorComponent class >> loadFromJson: jsonData [
+WEWActorComponent class >> loadFromJson: jsonData context: context [
 	^ (self actorComponentClassForType: (jsonData at: 'type' ifAbsent: [nil])) new
-		loadFromJson: jsonData;
+		loadFromJson: jsonData context: context;
 		yourself
 ]
 
@@ -90,7 +90,7 @@ WEWActorComponent >> isSceneNodeComponent [
 ]
 
 { #category : #serialization }
-WEWActorComponent >> loadFromJson: jsonData [
+WEWActorComponent >> loadFromJson: jsonData context: asyncContext [
 	self name: (jsonData at: 'name' ifAbsent: [self name])
 ]
 

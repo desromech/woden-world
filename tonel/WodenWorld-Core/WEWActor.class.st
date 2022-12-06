@@ -85,12 +85,12 @@ WEWActor >> isStatic [
 ]
 
 { #category : #serialization }
-WEWActor >> loadFromJson: jsonData [
+WEWActor >> loadFromJson: jsonData context: asyncContext [
 	self name: (jsonData at: 'name' ifAbsent: [self name]).
 	self syncMode: (jsonData at: 'synchronizationMode' ifAbsent: [self syncMode]).
 	jsonData at: 'components' ifPresent: [ :componentList |
 		componentList do: [ :eachComponent |
-			self addComponent: (WEWActorComponent loadFromJson: eachComponent)
+			self addComponent: (WEWActorComponent loadFromJson: eachComponent context: asyncContext)
 		]
 	].
 

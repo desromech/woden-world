@@ -21,8 +21,8 @@ WEWGenericComponent >> isGenericComponent [
 ]
 
 { #category : #serialization }
-WEWGenericComponent >> loadFromJson: jsonData [
-	super loadFromJson: jsonData.
+WEWGenericComponent >> loadFromJson: jsonData context: asyncContext [
+	super loadFromJson: jsonData context: asyncContext.
 	self type: (jsonData at: 'type' ifAbsent: [self type])
 ]
 

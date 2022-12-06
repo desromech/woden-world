@@ -42,7 +42,7 @@ WEWLandmark >> initialize [
 ]
 
 { #category : #serialization }
-WEWLandmark >> loadFromJson: jsonData [
+WEWLandmark >> loadFromJson: jsonData context: asyncContext [
 	self name: (jsonData at: 'name' ifAbsent: [self name]).
 	self description: (jsonData at: 'description' ifAbsent: [self description]).
 

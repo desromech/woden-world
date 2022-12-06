@@ -106,11 +106,11 @@ WEWLightSourceComponent >> color: anObject [
 	color := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #serialization }
 WEWLightSourceComponent >> encodeJsonKeyValues [
 	^ super encodeJsonKeyValues , {
 		#kind . kind.
-		#color . color.
+		#color . color encodeForJSON.
 		#intensity . intensity.
 		#range . range.
 		#castShadows . castShadows.
@@ -187,9 +187,9 @@ WEWLightSourceComponent >> kind: aLightSourceKindName [
 	kind := aLightSourceKindName asSymbol.
 ]
 
-{ #category : #accessing }
-WEWLightSourceComponent >> loadFromJson: jsonData [
-	super loadFromJson: jsonData.
+{ #category : #serialization }
+WEWLightSourceComponent >> loadFromJson: jsonData context: asyncContext [
+	super loadFromJson: jsonData context: asyncContext.
 	self kind: (jsonData at: 'kind' ifAbsent: [self kind]).
 	self intensity: (jsonData at: 'intensity' ifAbsent: [self intensity]).
 	self range: (jsonData at: 'range' ifAbsent: [self range]).
