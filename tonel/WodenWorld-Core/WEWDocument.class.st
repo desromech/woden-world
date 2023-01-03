@@ -5,18 +5,12 @@ Class {
 	#name : #WEWDocument,
 	#superclass : #WEWDocumentObject,
 	#instVars : [
-		'actorTemplates',
 		'actors',
 		'metadata',
 		'landmarks'
 	],
 	#category : #'WodenWorld-Core-Model'
 }
-
-{ #category : #accessing }
-WEWDocument >> actorTemplates [
-	^ actorTemplates
-]
 
 { #category : #accessing }
 WEWDocument >> actors [
@@ -26,11 +20,6 @@ WEWDocument >> actors [
 { #category : #adding }
 WEWDocument >> addActor: anActor [
 	actors add: anActor
-]
-
-{ #category : #adding }
-WEWDocument >> addActorTemplate: anActorTemplate [
-	actorTemplates add: anActorTemplate
 ]
 
 { #category : #adding }
@@ -66,10 +55,16 @@ WEWDocument >> defaultAvatarLandmarkTransform [
 
 { #category : #serialization }
 WEWDocument >> encodeJsonKeyValues [
+	| saveContext |
+	saveContext := WEWDocumentSavingContext new.
+	actors do: [:each |
+		each traceForSavingWith: saveContext
+	].
+
 	^ {
 		#metadata . metadata encodeForJSON.
-		#actorTemplates . actorTemplates collect: [:each | each encodeForJSON ] as: Array.
-		#actors . actors collect: [:each | each encodeForJSON ] as: Array.
+		#actorComponents . saveContext actorComponents collect: [:each | each encodeForJSON ] as: Array.
+		#actors . saveContext actors collect: [:each | each encodeForJSON ] as: Array.
 		#landmarks . landmarks collect: [:each | each encodeForJSON ] as: Array.
 	}
 ]
@@ -77,7 +72,6 @@ WEWDocument >> encodeJsonKeyValues [
 { #category : #initialization }
 WEWDocument >> initialize [
 	super initialize.
-	actorTemplates := OrderedCollection new.
 	actors := OrderedCollection new.
 	landmarks := OrderedCollection new.
 	metadata := WEWMetadata new.
@@ -89,26 +83,39 @@ WEWDocument >> landmarks [
 ]
 
 { #category : #serialization }
-WEWDocument >> loadFromJson: jsonData context: asyncContext [
+WEWDocument >> loadFromJson: jsonData context: context [
 	jsonData at: 'metadata' ifPresent: [ :found |
-		self metadata: (WEWMetadata loadFromJson: found context: asyncContext)
+		self metadata: (WEWMetadata loadFromJson: found context: context)
 	].
 
-	jsonData at: 'actorTemplates' ifPresent: [ :actorList |
-		actorList do: [ :eachActor |
-			self addActorTemplate: (WEWActor loadFromJson: eachActor context: asyncContext)
-		]
+	jsonData at: 'actorComponents' ifPresent: [ :actorComponentList |
+		actorComponentList do: [ :eachActorComponent |
+			context addActorComponent: (WEWActorComponent loadFromJson: eachActorComponent context: context)			
+		].
 	].
 
 	jsonData at: 'actors' ifPresent: [ :actorList |
 		actorList do: [ :eachActor |
-			self addActor: (WEWActor loadFromJson: eachActor context: asyncContext)
-		]
+			| loadedActor |
+			loadedActor := WEWActor loadFromJson: eachActor context: context.
+			context addActor: loadedActor.
+			self addActor: loadedActor
+		].
+
+		actorList doWithIndex:  [ :eachActor :actorIndex |
+			(actors at: actorIndex) loadReferencesFromJson: eachActor context: context
+		].
+	].
+
+	jsonData at: 'actorComponents' ifPresent: [ :actorComponentList |
+		actorComponentList doWithIndex: [ :eachActorComponent :actorComponentIndex |
+			(context actorComponents at: actorComponentIndex) loadReferencesFromJson: eachActorComponent context: context
+		].
 	].
 
 	jsonData at: 'landmarks' ifPresent: [ :landmarkList |
 		landmarkList do: [ :eachLandmark |
-			self addLandmark: (WEWLandmark loadFromJson: eachLandmark context: asyncContext)
+			self addLandmark: (WEWLandmark loadFromJson: eachLandmark context: context)
 		]
 	].
 

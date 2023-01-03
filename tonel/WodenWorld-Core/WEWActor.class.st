@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'name',
 		'components',
-		'syncMode'
+		'syncMode',
+		'savingID'
 	],
 	#category : #'WodenWorld-Core-Model'
 }
@@ -57,7 +58,7 @@ WEWActor >> encodeJsonKeyValues [
 	^ {
 		#name . name.
 		#syncMode . syncMode.
-		#components . components collect: [:each | each encodeForJSON ] as: Array.
+		#components . components collect: [:each | each savingID ] as: Array.
 	}
 ]
 
@@ -85,12 +86,17 @@ WEWActor >> isStatic [
 ]
 
 { #category : #serialization }
-WEWActor >> loadFromJson: jsonData context: asyncContext [
+WEWActor >> loadFromJson: jsonData context: context [
 	self name: (jsonData at: 'name' ifAbsent: [self name]).
 	self syncMode: (jsonData at: 'synchronizationMode' ifAbsent: [self syncMode]).
+	
+]
+
+{ #category : #serialization }
+WEWActor >> loadReferencesFromJson: jsonData context: context [
 	jsonData at: 'components' ifPresent: [ :componentList |
-		componentList do: [ :eachComponent |
-			self addComponent: (WEWActorComponent loadFromJson: eachComponent context: asyncContext)
+		componentList do: [ :eachComponentIndex |
+			self addComponent: (context actorComponents at: eachComponentIndex + 1)
 		]
 	].
 
@@ -109,6 +115,18 @@ WEWActor >> name: anObject [
 ]
 
 { #category : #accessing }
+WEWActor >> savingID [
+
+	^ savingID
+]
+
+{ #category : #accessing }
+WEWActor >> savingID: anObject [
+
+	savingID := anObject
+]
+
+{ #category : #accessing }
 WEWActor >> syncMode [
 
 	^ syncMode
@@ -118,4 +136,10 @@ WEWActor >> syncMode [
 WEWActor >> syncMode: aSynchronizationModeName [
 	self assert: (#(static deterministic nonDeterministic) includes: aSynchronizationModeName).
 	syncMode := aSynchronizationModeName asSymbol
+]
+
+{ #category : #'as yet unclassified' }
+WEWActor >> traceForSavingWith: savingContext [
+	savingContext addActor: self.
+	components do: [:each | each traceForSavingWith: savingContext ].
 ]

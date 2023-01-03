@@ -29,8 +29,8 @@ WEWUVSphereMeshComponent >> encodeJsonKeyValues [
 ]
 
 { #category : #serialization }
-WEWUVSphereMeshComponent >> loadFromJson: jsonData context: asyncContext [
-	super loadFromJson: jsonData context: asyncContext.
+WEWUVSphereMeshComponent >> loadFromJson: jsonData context: context [
+	super loadFromJson: jsonData context: context.
 	self radius: (jsonData at: 'radius' ifAbsent: [self radius]).
 	self segments: (jsonData at: 'segments' ifAbsent: [self segments]).
 	self slices: (jsonData at: 'slices' ifAbsent: [self slices]).

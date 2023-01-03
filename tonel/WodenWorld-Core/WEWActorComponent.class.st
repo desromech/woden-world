@@ -5,7 +5,8 @@ Class {
 	#name : #WEWActorComponent,
 	#superclass : #WEWDocumentObject,
 	#instVars : [
-		'name'
+		'name',
+		'savingID'
 	],
 	#classVars : [
 		'ActorComponentTypeNameToClassDictionary'
@@ -90,8 +91,13 @@ WEWActorComponent >> isSceneNodeComponent [
 ]
 
 { #category : #serialization }
-WEWActorComponent >> loadFromJson: jsonData context: asyncContext [
+WEWActorComponent >> loadFromJson: jsonData context: context [
 	self name: (jsonData at: 'name' ifAbsent: [self name])
+]
+
+{ #category : #serialization }
+WEWActorComponent >> loadReferencesFromJson: jsonData context: context [
+
 ]
 
 { #category : #accessing }
@@ -104,6 +110,23 @@ WEWActorComponent >> name [
 WEWActorComponent >> name: anObject [
 
 	name := anObject
+]
+
+{ #category : #accessing }
+WEWActorComponent >> savingID [
+
+	^ savingID
+]
+
+{ #category : #accessing }
+WEWActorComponent >> savingID: anObject [
+
+	savingID := anObject
+]
+
+{ #category : #'as yet unclassified' }
+WEWActorComponent >> traceForSavingWith: savingContext [
+	savingContext addActorComponent: self.
 ]
 
 { #category : #accessing }

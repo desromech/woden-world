@@ -35,7 +35,7 @@ WEWModelReferenceComponent >> buildGameFrameworkComponent [
 		name: name;
 		uri: uri;
 		elementSelector: elementSelector;
-		asyncContext: asyncContext;
+		asyncContext: self validAsyncContext;
 		yourself
 ]
 
@@ -73,10 +73,10 @@ WEWModelReferenceComponent >> isModelReferenceComponent [
 
 { #category : #serialization }
 WEWModelReferenceComponent >> loadFromJson: jsonData context: context [
-	super loadFromJson: jsonData context: asyncContext.
+	super loadFromJson: jsonData context: context.
 	self uri: (jsonData at: 'uri' ifAbsent: [self uri]).
 	self elementSelector: (jsonData at: 'elementSelector' ifAbsent: [self elementSelector]).
-	self asyncContext: context.
+	self asyncContext: context asyncContext.
 ]
 
 { #category : #accessing }
@@ -89,4 +89,11 @@ WEWModelReferenceComponent >> uri [
 WEWModelReferenceComponent >> uri: anObject [
 
 	uri := anObject
+]
+
+{ #category : #accessing }
+WEWModelReferenceComponent >> validAsyncContext [
+	^ asyncContext ifNil: [WDAbstractAsyncContentContext defaultForUri: uri]
+	
+	
 ]

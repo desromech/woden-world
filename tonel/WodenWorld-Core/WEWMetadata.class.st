@@ -117,7 +117,7 @@ WEWMetadata >> initialize [
 ]
 
 { #category : #serialization }
-WEWMetadata >> loadFromJson: jsonData context: asyncContext [
+WEWMetadata >> loadFromJson: jsonData context: context [
 	self formatVersion: (jsonData at: 'formatVersion' ifAbsent: [self formatVersion]).
 	self name: (jsonData at: 'name' ifAbsent: [self name]).
 	self title: (jsonData at: 'title' ifAbsent: [self title]).

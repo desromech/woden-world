@@ -48,7 +48,7 @@ WEWSceneNodeComponent >> children [
 WEWSceneNodeComponent >> encodeJsonKeyValues [
 	^ super encodeJsonKeyValues , {
 		#transform . transform encodeForJSON.
-		#children . children collect: [:each | each encodeForJSON ] as: Array.
+		#children . children collect: [:each | each savingID ] as: Array.
 		#sceneBackground . sceneBackground.
 	}
 ]
@@ -67,16 +67,21 @@ WEWSceneNodeComponent >> isSceneNodeComponent [
 ]
 
 { #category : #serialization }
-WEWSceneNodeComponent >> loadFromJson: jsonData context: asyncContext [
-	super loadFromJson: jsonData context: asyncContext.
+WEWSceneNodeComponent >> loadFromJson: jsonData context: context [
+	super loadFromJson: jsonData context: context.
 	self sceneBackground: (jsonData at: 'sceneBackground' ifAbsent: [self sceneBackground]).
 	jsonData at: 'transform' ifPresent: [:found |
 		self transform: (TRSTransform3D loadFromJson: found)
 	].
 	
+]
+
+{ #category : #serialization }
+WEWSceneNodeComponent >> loadReferencesFromJson: jsonData context: context [
+	super loadReferencesFromJson: jsonData context: context.
 	jsonData at: 'children' ifPresent: [ :childrenList |
-		childrenList do: [ :eachChild |
-			self addChild: (WEWActorComponent loadFromJson: eachChild context: asyncContext)
+		childrenList do: [ :eachChildIndex |
+			self addChild: (context actorComponents at: eachChildIndex + 1)
 		]
 	].
 ]
@@ -151,6 +156,12 @@ WEWSceneNodeComponent >> sceneBackground [
 WEWSceneNodeComponent >> sceneBackground: anObject [
 
 	sceneBackground := anObject
+]
+
+{ #category : #'as yet unclassified' }
+WEWSceneNodeComponent >> traceForSavingWith: savingContext [
+	super traceForSavingWith: savingContext.
+	children do:[:each | each traceForSavingWith: savingContext]
 ]
 
 { #category : #accessing }

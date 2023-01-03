@@ -188,8 +188,8 @@ WEWLightSourceComponent >> kind: aLightSourceKindName [
 ]
 
 { #category : #serialization }
-WEWLightSourceComponent >> loadFromJson: jsonData context: asyncContext [
-	super loadFromJson: jsonData context: asyncContext.
+WEWLightSourceComponent >> loadFromJson: jsonData context: context [
+	super loadFromJson: jsonData context: context.
 	self kind: (jsonData at: 'kind' ifAbsent: [self kind]).
 	self intensity: (jsonData at: 'intensity' ifAbsent: [self intensity]).
 	self range: (jsonData at: 'range' ifAbsent: [self range]).
