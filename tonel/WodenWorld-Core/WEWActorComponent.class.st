@@ -124,7 +124,7 @@ WEWActorComponent >> savingID: anObject [
 	savingID := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #serialization }
 WEWActorComponent >> traceForSavingWith: savingContext [
 	savingContext addActorComponent: self.
 ]

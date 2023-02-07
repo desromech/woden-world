@@ -4,7 +4,9 @@ Class {
 	#instVars : [
 		'actorComponents',
 		'actors',
-		'tracedSet'
+		'tracedSet',
+		'textures',
+		'materials'
 	],
 	#category : #'WodenWorld-Core-Model'
 }
@@ -39,9 +41,49 @@ WEWDocumentSavingContext >> addActorComponent: anActorComponent [
 	actorComponents add: anActorComponent.
 ]
 
+{ #category : #adding }
+WEWDocumentSavingContext >> addMaterial: aMaterial [
+	(tracedSet includes: aMaterial) ifTrue: [ ^ self ].
+	tracedSet add: aMaterial.
+	
+	aMaterial savingID: materials size.
+	actorComponents add: aMaterial.
+]
+
+{ #category : #adding }
+WEWDocumentSavingContext >> addTexture: aTexture [
+	(tracedSet includes: aTexture) ifTrue: [ ^ self ].
+	tracedSet add: aTexture.
+	
+	aTexture savingID: materials size.
+	textures add: aTexture.
+]
+
 { #category : #initialization }
 WEWDocumentSavingContext >> initialize [
 	tracedSet := IdentitySet new.
 	actorComponents := OrderedCollection new.
 	actors := OrderedCollection new.
+	textures := OrderedCollection new.
+	materials := OrderedCollection new.
+
+]
+
+{ #category : #accessing }
+WEWDocumentSavingContext >> materials [
+	^ materials
+	
+]
+
+{ #category : #accessing }
+WEWDocumentSavingContext >> textures [
+	^ textures
+]
+
+{ #category : #tracing }
+WEWDocumentSavingContext >> trace: anObject [
+	(tracedSet includes: anObject) ifTrue: [ ^ self ].
+	
+	anObject traceForSavingWith: self.
+	
 ]

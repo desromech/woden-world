@@ -138,8 +138,8 @@ WEWActor >> syncMode: aSynchronizationModeName [
 	syncMode := aSynchronizationModeName asSymbol
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #serialization }
 WEWActor >> traceForSavingWith: savingContext [
 	savingContext addActor: self.
-	components do: [:each | each traceForSavingWith: savingContext ].
+	components do: [:each | savingContext trace: each ].
 ]

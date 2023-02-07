@@ -58,7 +58,7 @@ WEWDocument >> encodeJsonKeyValues [
 	| saveContext |
 	saveContext := WEWDocumentSavingContext new.
 	actors do: [:each |
-		each traceForSavingWith: saveContext
+		saveContext trace: each
 	].
 
 	^ {

@@ -161,7 +161,7 @@ WEWSceneNodeComponent >> sceneBackground: anObject [
 { #category : #'as yet unclassified' }
 WEWSceneNodeComponent >> traceForSavingWith: savingContext [
 	super traceForSavingWith: savingContext.
-	children do:[:each | each traceForSavingWith: savingContext]
+	children do:[:each | savingContext trace: each ]
 ]
 
 { #category : #accessing }

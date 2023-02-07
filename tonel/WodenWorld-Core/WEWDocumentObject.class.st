@@ -34,7 +34,15 @@ WEWDocumentObject >> encodeAsJSONString [
 
 { #category : #serialization }
 WEWDocumentObject >> encodeForJSON [
-	^ OrderedDictionary newFromPairs: self encodeJsonKeyValues
+	| result |
+	result := OrderedDictionary new.
+	self encodeJsonKeyValues pairsDo:[:key :value |
+		value ifNotNil: [
+			result at: key put: value
+		]
+	].
+	
+	^ result
 ]
 
 { #category : #serialization }
